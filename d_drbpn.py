@@ -1,5 +1,6 @@
 import os
 import torch.nn as nn
+
 import torch.optim as optim
 from base_networks import *
 from torchvision.transforms import *
@@ -36,11 +37,11 @@ class Net(nn.Module):
         for m in self.modules():
             classname = m.__class__.__name__
             if classname.find('Conv2d') != -1:
-        	    torch.nn.init.kaiming_normal_(m.weight)
+        	    nn.init.kaiming_normal_(m.weight)
         	    if m.bias is not None:
         		    m.bias.data.zero_()
             elif classname.find('ConvTranspose2d') != -1:
-        	    torch.nn.init.kaiming_normal_(m.weight)
+        	    nn.init.kaiming_normal_(m.weight)
         	    if m.bias is not None:
         		    m.bias.data.zero_()
             

@@ -74,8 +74,8 @@ if cuda:
 model_name = os.path.join(opt.save_folder, opt.model_type, str(opt.upscale_factor), opt.model)
 print(model_name)
 if os.path.exists(model_name):
-        model.load_state_dict(torch.load(model_name, map_location=lambda storage, loc: storage))
-        print('Pre-trained SR model is loaded.')
+    model.load_state_dict(torch.load(model_name, map_location=lambda storage, loc: storage))
+    print('Pre-trained SR model is loaded.')
 
 if cuda:
     model = model.cuda(gpus_list[0])
@@ -180,7 +180,7 @@ def loadImg():
         ssim = skimage.metrics.structural_similarity(sr, hr)
         avg_ssim += ssim
         t4 = time.time()
-        print("===> Processing: %s || Timer: %.4f sec. || psnr: %.4f db || ssim: %.4f" % (name, (t4 - t3), psnr, ssim))
+        print("===> Processing: %s || Timer: %.4f sec. || psnr: %.4f db || ssim: %.4f" 
     print("===> Avg. PSNR: {:.4f} dB".format(avg_psnr / length))
     print("===> Avg. SSIM: {:.4f}".format(avg_ssim / length))
 

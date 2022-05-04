@@ -19,32 +19,32 @@ from data import get_training_set
 import pdb
 import socket
 import time
-from tensorboardX import SummaryWriter
+#from tensorboardX import SummaryWriter
 from tqdm import tqdm
 #import re
 
 # Training settings
 parser = argparse.ArgumentParser(description='PyTorch Super Res Example')
 parser.add_argument('--upscale_factor', type=int, default=4, help="super resolution upscale factor")
-parser.add_argument('--batchSize', type=int, default=20, help='training batch size')
+parser.add_argument('--batchSize', type=int, default=16, help='training batch size')
 parser.add_argument('--recursion', type=int, default=3, help='Recursions num')
 parser.add_argument('--nEpochs', type=int, default=2000, help='number of epochs to train for')
 parser.add_argument('--snapshots', type=int, default=50, help='Snapshots')
-parser.add_argument('--start_iter', type=int, default=1, help='Starting Epoch')
+parser.add_argument('--start_iter', type=int, default=1400, help='Starting Epoch')
 parser.add_argument('--lr', type=float, default=1e-4, help='Learning Rate. Default=0.01')
 parser.add_argument('--gpu_mode', type=bool, default=True)
 parser.add_argument('--threads', type=int, default=1, help='number of threads for data loader to use')
 parser.add_argument('--seed', type=int, default=123, help='random seed to use. Default=123')
 parser.add_argument('--gpus', default=1, type=int, help='number of gpu')
 parser.add_argument('--data_dir', type=str, default='./Dataset')
-parser.add_argument('--data_augmentation', type=bool, default=True)
+parser.add_argument('--data_augmentation', type=bool, default=False)
 parser.add_argument('--hr_train_dataset', type=str, default='DIV2K_train_HR')
 parser.add_argument('--train_dataset', type=str, default='DIV2K_train_HR')
-parser.add_argument('--model_type', type=str, default='DRBPN')
+parser.add_argument('--model_type', type=str, default='D-DRBPN')
 parser.add_argument('--residual', type=bool, default=True)
 parser.add_argument('--patch_size', type=int, default=40, help='Size of cropped HR image')
-parser.add_argument('--pretrained_sr', default='MIX2K_LR_aug_x4dl10DBPNITERtpami_epoch_399.pth', help='sr pretrained base model')
-parser.add_argument('--pretrained', type=bool, default=False)
+parser.add_argument('--pretrained_sr', default='DIV2K_train_HRD-DRBPN4_recursion3_epoch_1399.pth', help='sr pretrained base model')
+parser.add_argument('--pretrained', type=bool, default=True)
 parser.add_argument('--save_folder', default='weights', help='Location to save checkpoint models')
 parser.add_argument('--prefix', default='Jupiter', help='Host')
 
@@ -53,9 +53,10 @@ gpus_list = range(opt.gpus)
 hostname = str(socket.gethostname())
 cudnn.benchmark = True
 print(opt)
-runName = 'runs/' + opt.model_type + '_upscale_factor' + str(opt.upscale_factor) + '_recursion'+str(opt.recursion)
-writer = SummaryWriter(runName)
+#runName = 'runs/' + opt.model_type + '_upscale_factor' + str(opt.upscale_factor) + '_recursion'+str(opt.recursion)
+#writer = SummaryWriter(runName)
 
+os.environ["CUDA_VISIBLE_DEVICES"] = "2"
 def train(epoch):
     epoch_loss = 0
     model.train()
@@ -80,7 +81,7 @@ def train(epoch):
         optimizer.step()
 
         print("===> Epoch[{}]({}/{}): Loss: {:.4f} || Timer: {:.4f} sec.".format(epoch, iteration, len(training_data_loader), loss.data, (t1 - t0)))
-    writer.add_scalar('loss', epoch_loss / len(training_data_loader), global_step=epoch)
+    #writer.add_scalar('loss', epoch_loss / len(training_data_loader), global_step=epoch)
     print("===> Epoch {} Complete: Avg. Loss: {:.4f}".format(epoch, epoch_loss / len(training_data_loader)))
 
 
